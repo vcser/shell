@@ -5,11 +5,22 @@
 
 int main(int argc, char *argv[]) {
     while (1) {
-        parse();
+        printf("$ ");
+        shell_getline();
+        shell_parse();
+        shell_execute();
     }
     return 0;
 }
 
-void parse() {
+void shell_parse() {
 
+}
+
+void shell_parse() {
+
+}
+
+void shell_execute() {
+    
 }

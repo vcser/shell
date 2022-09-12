@@ -1,7 +1,7 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-void shell_parse();
+void shell_parse(char s[], char ** parseS);
 void shell_getline();
 void shell_execute();
 void shell_exit();

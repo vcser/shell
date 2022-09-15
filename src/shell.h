@@ -1,9 +1,9 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-char ***shell_parse(char **line);
-void shell_getline();
-void shell_execute();
+char *shell_getline();
+char **shell_parse(char *line);
+void shell_execute(char **command);
 void shell_exit();
 
 struct builtin {

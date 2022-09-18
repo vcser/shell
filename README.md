@@ -1,2 +1,19 @@
 # shell
-tarea 1 de la asignatura sistemas operativos, la cual consiste en hacer una shell
+Tarea 1 de la asignatura sistemas operativos
+
+### Integrantes
+- Richard Gonzalez [Rialgou](https://github.com/Rialgou)
+- Cristobal Muñoz [crmunozb](https://github.com/crmunozb)
+- Vicente Cser [vcser](https://github.com/vcser)
+
+### Objetivos
+- [X] Proporcionar un prompt
+- [X] Leer un comando desde teclado y parsear la entrada
+- [X] Ejecutar el comando ingresado en un proceso concurrente
+- [X] Imprimir nuevamente el prompt al ingresar enter
+- [ ] Soportar comandos que se comunican mediante pipes
+- [X] Soportar el comando exit para terminar
+- [X] Continuar si es que un comando ingresado no existe
+- [ ] Crear un comando que permita a un proceso comunicarse con otro proceso usando señales
+- [X] Reconocer el Control-C y preguntar si desea continuar o no ejecución de la shell
+- [ ] Crear comando que permita reportar el uso de recursos en términos de tiempo de ejecución de usuario y sistema

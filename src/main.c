@@ -110,7 +110,7 @@ void shell_cd(char **args) {
 void shell_pwd(char **args) {
     char cwd[PATH_MAX];
     if (getcwd(cwd, PATH_MAX) == NULL) {
-        perror("cwd");
+        perror("pwd");
         return;
     }
     printf("%s\n", cwd);

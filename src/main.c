@@ -5,13 +5,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <signal.h>
 #include "shell.h"
 
 // solucion temporal
 #define BUF_SIZE 1000
 char line[BUF_SIZE];
 
+void sigint_handler(int parameter) {
+    char answer;
+    printf("Desea salir [Y/n] ");
+    scanf("%c", &answer);
+    if (answer != 'n') {
+        exit(0);
+    }
+}
+
 int main(int argc, char *argv[]) {
+    signal(SIGINT, sigint_handler);
+
     size_t len = 0;
     ssize_t nread = 0;
     while (1) {

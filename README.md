@@ -1,6 +1,13 @@
 # shell
 Tarea 1 de la asignatura sistemas operativos
 
+## Instrucciones
+```
+git clone https://github.com/vcser/shell.git
+cd shell
+make run
+```
+
 ### Integrantes
 - Richard Gonzalez [Rialgou](https://github.com/Rialgou)
 - Cristobal Muñoz [crmunozb](https://github.com/crmunozb)
@@ -15,5 +22,5 @@ Tarea 1 de la asignatura sistemas operativos
 - [X] Soportar el comando exit para terminar
 - [X] Continuar si es que un comando ingresado no existe
 - [ ] Crear un comando que permita a un proceso comunicarse con otro proceso usando señales
-- [X] Reconocer el Control-C y preguntar si desea continuar o no ejecución de la shell
+- [X] Reconocer el Control-C y preguntar si desea continuar o no la ejecución de la shell
 - [ ] Crear comando que permita reportar el uso de recursos en términos de tiempo de ejecución de usuario y sistema

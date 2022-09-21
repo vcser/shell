@@ -14,8 +14,8 @@ char line[BUF_SIZE];
 
 void sigint_handler(int parameter) {
     char answer;
-    printf("Desea salir [Y/n] ");
-    scanf("%c", &answer);
+    write(1 ,"\nDesea salir [Y/n] ",19);
+    read(0,&answer, 1);
     if (answer != 'n') {
         exit(0);
     }
@@ -76,6 +76,7 @@ void shell_execute(char **command) {
     if (command[0] == NULL) return;
 
     int builtins_size = sizeof(builtins) / sizeof(struct builtin);
+    //printf("builtin size: %d",builtins_size);
     for (int i = 0; i < builtins_size; i++) {
         if (strcmp(command[0], builtins[i].name) == 0) {
             builtins[i].func(command);

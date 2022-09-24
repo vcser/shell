@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
     while (1) {
         printf("$ ");
         shell_getline();
+        shell_howmanypipes(line);
         char **command = shell_parse(line);
         /* for (int i = 0; command[i] != NULL; i++) {
             printf("Token %d = %s\n", i+1, command[i]);
@@ -127,4 +128,18 @@ void shell_pwd(char **args) {
         return;
     }
     printf("%s\n", cwd);
+}
+int shell_howmanypipes(char *line){
+    char *token;
+    int count =0;
+    token = strtok(line, "|");
+    // agrega una más de lo que deberia D:
+    while (token)
+    {
+        token = strtok(NULL,"|");
+        count++;
+    }
+    printf("pipes: %d\n",count);
+    return count;
+    
 }

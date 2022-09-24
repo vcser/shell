@@ -131,11 +131,12 @@ void shell_pwd(char **args) {
 }
 int shell_howmanypipes(char *line){
     char *token;
-    int count =0;
+    int count =-1;
     token = strtok(line, "|");
     // agrega una más de lo que deberia D:
     while (token)
     {
+        printf("%s\n",token);
         token = strtok(NULL,"|");
         count++;
     }

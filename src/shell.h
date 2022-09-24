@@ -5,6 +5,7 @@ char *shell_getline();
 char **shell_parse(char *line);
 void shell_execute(char **command);
 int shell_howmanypipes(char *line);
+void shell_prueba(char *line);
 
 // shell builtins
 void shell_exit(char **args);

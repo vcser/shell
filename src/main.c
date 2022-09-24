@@ -16,6 +16,7 @@ void sigint_handler(int parameter) {
     char answer;
     write(1 ,"\nDesea salir [Y/n] ",19);
     read(0,&answer, 1);
+
     if (answer != 'n') {
         exit(0);
     }
@@ -30,6 +31,8 @@ int main(int argc, char *argv[]) {
         printf("$ ");
         shell_getline();
         shell_howmanypipes(line);
+        fflush(stdout);
+        //shell_prueba(line);
         char **command = shell_parse(line);
         /* for (int i = 0; command[i] != NULL; i++) {
             printf("Token %d = %s\n", i+1, command[i]);
@@ -46,6 +49,7 @@ char *shell_getline() {
         // ERROR
         perror("shell");
     }
+    fflush(stdin);
     // if (getline(&line, &len, stdin) == -1) {
     //     // error
     // }
@@ -75,7 +79,8 @@ char **shell_parse(char *line) {
 
 void shell_execute(char **command) {
     if (command[0] == NULL) return;
-
+    
+    //podriamos dejar el builtins_size como una constante?, para que no haga la operación cada vez
     int builtins_size = sizeof(builtins) / sizeof(struct builtin);
     //printf("builtin size: %d",builtins_size);
     for (int i = 0; i < builtins_size; i++) {
@@ -129,17 +134,36 @@ void shell_pwd(char **args) {
     }
     printf("%s\n", cwd);
 }
+
 int shell_howmanypipes(char *line){
-    char *token;
-    int count =-1;
-    token = strtok(line, "|");
-    while (token)
-    {
-        //printf("%s\n",token);
-        token = strtok(NULL,"|");
-        count++;
+    int count =0;
+    for(int i=0;line[i]!='\0';i++){
+        if(line[i]=='|'){
+            count++;
+        }
     }
-    //printf("pipes: %d\n",count);
+    printf("pipes: %d\n",count);
     return count;
     
+}
+
+void shell_prueba(char *line){
+    char *token;
+    unsigned int capacity = 16, size = 0;
+    token = strtok(line, "|");
+    char **current = malloc(capacity*sizeof(char*));
+    while(token){
+        int len = strlen(token);
+        if(size+1 >= capacity){
+            capacity*=2;
+            current = realloc(current,capacity*sizeof(char *));
+        }
+        current[size] = malloc(len*sizeof(char*));
+        strcpy(current[size++],token);
+        //printf("%s", current[size]);
+    }
+    for(int i; current[i]!=NULL;i++){
+        free(current[i]);
+    }
+    free(current);
 }

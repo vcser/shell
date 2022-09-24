@@ -133,14 +133,13 @@ int shell_howmanypipes(char *line){
     char *token;
     int count =-1;
     token = strtok(line, "|");
-    // agrega una más de lo que deberia D:
     while (token)
     {
-        printf("%s\n",token);
+        //printf("%s\n",token);
         token = strtok(NULL,"|");
         count++;
     }
-    printf("pipes: %d\n",count);
+    //printf("pipes: %d\n",count);
     return count;
     
 }

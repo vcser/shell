@@ -3,6 +3,8 @@
 
 char *shell_getline();
 char **shell_parse(char *line);
+char ***shell_parsepipe(char *line);
+void shell_executepipe(char ***command);
 void shell_execute(char **command);
 int shell_howmanypipes(char *line);
 void shell_prueba(char *line);

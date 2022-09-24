@@ -28,16 +28,23 @@ int main(int argc, char *argv[]) {
     size_t len = 0;
     ssize_t nread = 0;
     while (1) {
+        fflush(stdin);
+        fflush(stdout);
         printf("$ ");
         shell_getline();
-        shell_howmanypipes(line);
-        fflush(stdout);
         //shell_prueba(line);
-        char **command = shell_parse(line);
+        if(shell_howmanypipes(line)>0){
+            char ***command = shell_parsepipe(line);
+            shell_executepipe(command);
+        }
+        else{
+            char **command = shell_parse(line);
+            shell_execute(command);
+        }
         /* for (int i = 0; command[i] != NULL; i++) {
             printf("Token %d = %s\n", i+1, command[i]);
         } */
-        shell_execute(command);
+        
         //free(commands);
     }
     //free(line);
@@ -49,7 +56,6 @@ char *shell_getline() {
         // ERROR
         perror("shell");
     }
-    fflush(stdin);
     // if (getline(&line, &len, stdin) == -1) {
     //     // error
     // }
@@ -142,28 +148,34 @@ int shell_howmanypipes(char *line){
             count++;
         }
     }
-    printf("pipes: %d\n",count);
+    //printf("pipes: %d\n",count);
     return count;
     
 }
 
 void shell_prueba(char *line){
     char *token;
+    char **command = malloc(16 * sizeof(char *));
     unsigned int capacity = 16, size = 0;
-    token = strtok(line, "|");
-    char **current = malloc(capacity*sizeof(char*));
-    while(token){
+
+    token = strtok(line, "| ");
+    while (token) {
         int len = strlen(token);
-        if(size+1 >= capacity){
-            capacity*=2;
-            current = realloc(current,capacity*sizeof(char *));
+        if (size + 1 >= capacity) {
+            capacity *= 2;
+            command = realloc(command, capacity * sizeof(char *));
         }
-        current[size] = malloc(len*sizeof(char*));
-        strcpy(current[size++],token);
-        //printf("%s", current[size]);
+        command[size] = malloc(len * sizeof(char));
+        strcpy(command[size++], token);
+        //printf("%s\n", command[size-1]);
+        token = strtok(NULL, "| ");
     }
-    for(int i; current[i]!=NULL;i++){
-        free(current[i]);
-    }
-    free(current);
+    command[size] = NULL;
+    
+}
+char ***shell_parsepipe(char *line){
+    return NULL;
+}
+void shell_executepipe(char ***command){
+
 }

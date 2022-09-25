@@ -189,7 +189,9 @@ void shell_executepipe(char ***command){
             if (*(command + 1) != NULL)
                 dup2(p[1], 1);
             close(p[0]);
-            execvp((*command)[0], *command);
+            if (execvp((*command)[0], *command) == -1) {
+                perror((*command)[0]);
+            }
             exit(EXIT_FAILURE);
         }
         else{

@@ -18,7 +18,7 @@ make run
 - [X] Leer un comando desde teclado y parsear la entrada
 - [X] Ejecutar el comando ingresado en un proceso concurrente
 - [X] Imprimir nuevamente el prompt al ingresar enter
-- [ ] Soportar comandos que se comunican mediante pipes
+- [X] Soportar comandos que se comunican mediante pipes
 - [X] Soportar el comando exit para terminar
 - [X] Continuar si es que un comando ingresado no existe
 - [ ] Crear un comando que permita a un proceso comunicarse con otro proceso usando señales

@@ -167,7 +167,7 @@ char ***shell_parsepipe(char *line, int pipes){
 }
 
 void shell_executepipe(char ***command){
-    if (command[0][0] == NULL) return;
+    if (command[0] == NULL) return;
     for (int i = 0; i < BUILTINS_SIZE; i++) {
         if (strcmp(command[0][0], builtins[i].name) == 0) {
             builtins[i].func(command[0]);

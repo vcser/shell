@@ -32,34 +32,18 @@ int main(int argc, char *argv[]) {
     while (1) {
         printf("$ ");
         shell_getline();
-        //shell_prueba(line);
         pipes = shell_howmanypipes(line);
-        if(pipes > 0){
-            char ***command = shell_parsepipe(line,(pipes+1));
-            shell_executepipe(command);
-        }
-        else{
-            char **command = shell_parse(line);
-            shell_execute(command);
-        }
-        /* for (int i = 0; command[i] != NULL; i++) {
-            printf("Token %d = %s\n", i+1, command[i]);
-        } */
+        char ***command = shell_parsepipe(line,(pipes+1));
+        shell_executepipe(command);
         
-        //free(commands);
     }
-    //free(line);
     return 0;
 }
 
 char *shell_getline() {
     if (fgets(line, BUF_SIZE, stdin) == NULL) {
-        // ERROR
         perror("shell");
     }
-    // if (getline(&line, &len, stdin) == -1) {
-    //     // error
-    // }
     return line;
 }
 
@@ -77,45 +61,10 @@ char **shell_parse(char *line) {
         }
         command[size] = malloc(len * sizeof(char));
         strcpy(command[size++], token);
-        //printf("%s\n", token);
         token = strtok(NULL, " \n");
     }
     command[size] = NULL;
     return command;
-}
-
-void shell_execute(char **command) {
-    if (command[0] == NULL) return;
-    
-    //podriamos dejar el builtins_size como una constante?, para que no haga la operación cada vez
-    int builtins_size = sizeof(builtins) / sizeof(struct builtin);
-    //printf("builtin size: %d",builtins_size);
-    for (int i = 0; i < builtins_size; i++) {
-        if (strcmp(command[0], builtins[i].name) == 0) {
-            builtins[i].func(command);
-            return;
-        }
-    }
-
-    pid_t child_pid = fork();
-
-    if (child_pid == 0) {
-        if (execvp(command[0], command) == -1) {
-            perror(command[0]);
-        }
-    } else if (child_pid > 0) {
-        int status;
-        //waitpid(child_pid, &status, WUNTRACED);
-        wait(NULL);
-    } else {
-        perror("shell");
-    }
-
-    // no estoy seguro si liberar la memoria aqui o fuera de la funcion
-    for (int i = 0; command[i] != NULL; i++) {
-        free(command[i]);
-    }
-    free(command);
 }
 
 void shell_exit(char **args) {
@@ -160,6 +109,7 @@ char ***shell_parsepipe(char *line, int pipes){
     int count =0;
     unsigned int size = 0;
     token = strtok(line, "|\n");
+
     while(token){
         int len = strlen(token);
         command[size] = malloc(len*sizeof(char));
@@ -167,19 +117,58 @@ char ***shell_parsepipe(char *line, int pipes){
         size++;
         token = strtok(NULL,"|\n");
     }
+
     for(int i=0;i<size;i++){
         commands[i] = shell_parse(command[i]);
         count =0;
         while(commands[i][count]!= NULL){
-            printf("%s ",commands[i][count]);
+            //printf("%s ",commands[i][count]);
             count++;
         }
-        printf("\n");
+        //printf("\n");
     }
-
+    
     return commands;
 }
 
 void shell_executepipe(char ***command){
+    if (command[0][0] == NULL) return;
+    for (int i = 0; i < BUILTINS_SIZE; i++) {
+        if (strcmp(command[0][0], builtins[i].name) == 0) {
+            builtins[i].func(command[0]);
+            return;
+        }
+    }
 
+    int   p[2];
+    pid_t pid;
+    int   fd_in = 0;
+
+    while (*command != NULL){
+        pipe(p);
+        if ((pid = fork()) == -1){
+            exit(EXIT_FAILURE);
+        }
+        else if (pid == 0){
+            dup2(fd_in, 0); 
+            if (*(command + 1) != NULL)
+                dup2(p[1], 1);
+            close(p[0]);
+            execvp((*command)[0], *command);
+            exit(EXIT_FAILURE);
+            }
+      else{
+            wait(NULL);
+            close(p[1]);
+            fd_in = p[0]; 
+            command++;
+        }
+    }
+    /*for (int i = 0; command[i] != NULL; i++) {
+        for(int j=0;command[i][j] != NULL;j++){
+            free(command[i][j]);
+        }
+        free(command[i]);
+    }
+    free(command);*/
 }

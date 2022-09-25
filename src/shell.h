@@ -24,4 +24,6 @@ struct builtin builtins[] = {
     {"pwd", shell_pwd},
 };
 
+
+#define BUILTINS_SIZE sizeof(builtins) / sizeof(struct builtin)
 #endif

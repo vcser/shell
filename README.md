@@ -21,6 +21,6 @@ make run
 - [X] Soportar comandos que se comunican mediante pipes
 - [X] Soportar el comando exit para terminar
 - [X] Continuar si es que un comando ingresado no existe
-- [ ] Crear un comando que permita a un proceso comunicarse con otro proceso usando señales
+- [X] Crear un comando que permita a un proceso comunicarse con otro proceso usando señales
 - [X] Reconocer el Control-C y preguntar si desea continuar o no la ejecución de la shell
 - [ ] Crear comando que permita reportar el uso de recursos en términos de tiempo de ejecución de usuario y sistema

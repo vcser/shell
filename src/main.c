@@ -138,7 +138,7 @@ int shell_howmanypipes(char *line){
 }
 
 char ***shell_parsepipe(char *line, int pipes){
-    char ***commands = malloc( pipes * sizeof(char**));
+    char ***commands = malloc( (pipes+1) * sizeof(char**));
     char **command = malloc(pipes * sizeof(char*));
     char *token;
     int count =0;
@@ -155,14 +155,8 @@ char ***shell_parsepipe(char *line, int pipes){
 
     for(int i=0;i<size;i++){
         commands[i] = shell_parse(command[i]);
-        count =0;
-        while(commands[i][count]!= NULL){
-            //printf("%s ",commands[i][count]);
-            count++;
-        }
-        //printf("\n");
     }
-    
+    commands[pipes] = NULL;
     return commands;
 }
 

@@ -22,8 +22,14 @@ void sigint_handler(int parameter) {
     }
 }
 
+void sigusr_handler(int parameter) {
+    write(1 ,"recibido señal SIGUSRX\n",25);
+}
+
 int main(int argc, char *argv[]) {
     signal(SIGINT, sigint_handler);
+    signal(SIGUSR1, sigusr_handler);
+    signal(SIGUSR2, sigusr_handler);
 
     size_t len = 0;
     ssize_t nread = 0;
@@ -130,6 +136,35 @@ void shell_cd(char **args) {
     if (chdir(args[1]) == -1) {
         perror(args[1]);
     }
+}
+
+void shell_send_signal(char **args) {
+    pid_t pid = getpid();
+    int s = SIGUSR1;
+    // parseo de los argumentos
+    for (int i = 0; args[i] != NULL; i++) {
+        for (int j = 0; args[i][j] != 0; j++) {
+            if (args[i][j] == '-') {
+                if (args[i][j+1] == 'p') {
+                    if (args[i+1] == NULL) goto ERROR;
+                    pid = atoi(args[i+1]);
+                } else if (args[i][j+1] == 's') {
+                    if (args[i+1] == NULL) goto ERROR;
+                    int number = atoi(args[i+1]);
+                    if (number == 1)
+                        s = SIGUSR1;
+                    else if (number == 2)
+                        s = SIGUSR2;
+                }
+            }
+        }
+    }
+    // enviar señal al proceso especificado
+    if (kill(pid, s) == -1) {
+        perror("send_signal");
+    }
+    return;
+    ERROR: fprintf(stderr, "ERROR: send_signal\nusage: send_signal -p <pid> [-s <1|2>]\n");
 }
 
 void shell_pwd(char **args) {

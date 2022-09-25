@@ -26,4 +26,6 @@ struct builtin builtins[] = {
     {"send_signal", shell_send_signal},
 };
 
+
+#define BUILTINS_SIZE sizeof(builtins) / sizeof(struct builtin)
 #endif

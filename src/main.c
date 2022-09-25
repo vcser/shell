@@ -191,8 +191,8 @@ void shell_executepipe(char ***command){
             close(p[0]);
             execvp((*command)[0], *command);
             exit(EXIT_FAILURE);
-            }
-      else{
+        }
+        else{
             wait(NULL);
             close(p[1]);
             fd_in = p[0]; 

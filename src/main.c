@@ -39,7 +39,8 @@ int main(int argc, char *argv[]) {
         printf("$ ");
         shell_getline();
         //shell_prueba(line);
-        if(pipes = shell_howmanypipes(line)>0){
+        pipes = shell_howmanypipes(line);
+        if(pipes > 0){
             char ***command = shell_parsepipe(line,(pipes+1));
             shell_executepipe(command);
         }
@@ -183,30 +184,35 @@ int shell_howmanypipes(char *line){
             count++;
         }
     }
-    printf("pipes: %d\n",count);
     return count;
     
 }
 
 char ***shell_parsepipe(char *line, int pipes){
-    printf("%d\n",pipes);
-    char ***command = malloc( pipes * sizeof(char**));
+    char ***commands = malloc( pipes * sizeof(char**));
+    char **command = malloc(pipes * sizeof(char*));
     char *token;
-    int size_com;
-    token =strtok(line, "|");
-
-    printf("%ld %d\n",strlen(token),pipes);
-    for(int i=0;i<pipes;i++){
-        command[i] = shell_parse(token);
-        size_com = strlen(token);
-        token = strtok(NULL, " \n");
-        for (int j = 0; j <size_com ; j++)
-        {
-            printf("%s", command[i][j]);
+    int count =0;
+    unsigned int size = 0;
+    token = strtok(line, "|\n");
+    while(token){
+        int len = strlen(token);
+        command[size] = malloc(len*sizeof(char));
+        strcpy(command[size],token);
+        size++;
+        token = strtok(NULL,"|\n");
+    }
+    for(int i=0;i<size;i++){
+        commands[i] = shell_parse(command[i]);
+        count =0;
+        while(commands[i][count]!= NULL){
+            printf("%s ",commands[i][count]);
+            count++;
         }
+        printf("\n");
     }
 
-    return NULL;
+    return commands;
 }
 
 void shell_executepipe(char ***command){

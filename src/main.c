@@ -15,6 +15,7 @@ char line[BUF_SIZE];
 void sigint_handler(int parameter) {
     char answer;
     write(1 ,"\nDesea salir [Y/n] ",19);
+    fflush(stdout);
     read(0,&answer, 1);
 
     if (answer != 'n') {
@@ -33,14 +34,13 @@ int main(int argc, char *argv[]) {
 
     size_t len = 0;
     ssize_t nread = 0;
+    int pipes;
     while (1) {
-        fflush(stdin);
-        fflush(stdout);
         printf("$ ");
         shell_getline();
         //shell_prueba(line);
-        if(shell_howmanypipes(line)>0){
-            char ***command = shell_parsepipe(line);
+        if(pipes = shell_howmanypipes(line)>0){
+            char ***command = shell_parsepipe(line,(pipes+1));
             shell_executepipe(command);
         }
         else{
@@ -183,34 +183,32 @@ int shell_howmanypipes(char *line){
             count++;
         }
     }
-    //printf("pipes: %d\n",count);
+    printf("pipes: %d\n",count);
     return count;
     
 }
 
-void shell_prueba(char *line){
+char ***shell_parsepipe(char *line, int pipes){
+    printf("%d\n",pipes);
+    char ***command = malloc( pipes * sizeof(char**));
     char *token;
-    char **command = malloc(16 * sizeof(char *));
-    unsigned int capacity = 16, size = 0;
+    int size_com;
+    token =strtok(line, "|");
 
-    token = strtok(line, "| ");
-    while (token) {
-        int len = strlen(token);
-        if (size + 1 >= capacity) {
-            capacity *= 2;
-            command = realloc(command, capacity * sizeof(char *));
+    printf("%ld %d\n",strlen(token),pipes);
+    for(int i=0;i<pipes;i++){
+        command[i] = shell_parse(token);
+        size_com = strlen(token);
+        token = strtok(NULL, " \n");
+        for (int j = 0; j <size_com ; j++)
+        {
+            printf("%s", command[i][j]);
         }
-        command[size] = malloc(len * sizeof(char));
-        strcpy(command[size++], token);
-        //printf("%s\n", command[size-1]);
-        token = strtok(NULL, "| ");
     }
-    command[size] = NULL;
-    
-}
-char ***shell_parsepipe(char *line){
+
     return NULL;
 }
+
 void shell_executepipe(char ***command){
 
 }
